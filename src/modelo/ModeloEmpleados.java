@@ -15,7 +15,7 @@ import javax.swing.table.AbstractTableModel;
 public class ModeloEmpleados extends AbstractTableModel{
     
     private ArrayList<Object[]> datos;
-String nombreCol[] = {"ID","Nombre","Apellido paterno","Apellido materno","Puesto","Correo"};
+    String nombreCol[] = {"ID","Nombre","Apellido paterno","Apellido materno","Puesto","Correo"};
 
     public ModeloEmpleados (ArrayList d){
      datos = d;
@@ -35,8 +35,9 @@ String nombreCol[] = {"ID","Nombre","Apellido paterno","Apellido materno","Puest
     public Object getValueAt(int r, int c) {
         return datos.get(r)[c];
     }
-    
-    public String getColumName(int i){
+
+    @Override
+    public String getColumnName(int i){
      return nombreCol[i];
     }
     

@@ -12,7 +12,10 @@ import control.UsuarioJpaController;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -24,6 +27,11 @@ import modelo.ModeloEmpleados;
 import modelo.ModeloPobladores;
 import modelo.Poblador;
 import modelo.Usuario;
+import vista.servicios.AguaPotable;
+import vista.servicios.AlumbradoPublico;
+import vista.servicios.Drenaje;
+import vista.servicios.Panteones;
+import vista.servicios.RecoleccionDeResiduos;
 
 /**
  *
@@ -34,6 +42,7 @@ private ModeloPobladores mPo;
 private ModeloEmpleados mEm;
 private PobladorJpaController pcon;
  private List<Poblador> pobladores ;
+ private final int consecutivo = 0;
  
 private ArrayList<Object[]> datosPobladores;
 private ArrayList<Object[]> datosEmpleados;
@@ -62,7 +71,7 @@ private AreaJpaController carea;
                          tablaPo.setModel(mPo);
                econ = new EmpleadoJpaController(emf);
                          cargarDatosEm();
-                        tablePersonal.setModel(mEm);
+                        tablePersonal.setModel(mEm);                        
                         tabbedpane.setSelectedIndex(5);
                         agregaAreas();
     }
@@ -158,18 +167,10 @@ private AreaJpaController carea;
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         nombre = new javax.swing.JTextField();
         paterno = new javax.swing.JTextField();
         materno = new javax.swing.JTextField();
-        edad = new javax.swing.JSpinner();
-        jLabel12 = new javax.swing.JLabel();
-        dia = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
-        mes = new javax.swing.JTextField();
-        jLabel14 = new javax.swing.JLabel();
-        año = new javax.swing.JTextField();
         jButton5 = new javax.swing.JButton();
         cnaci = new com.toedter.calendar.JDateChooser();
         jPanel3 = new javax.swing.JPanel();
@@ -201,13 +202,8 @@ private AreaJpaController carea;
         jLabel19 = new javax.swing.JLabel();
         epuesto = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
-        edia = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jLabel21 = new javax.swing.JLabel();
-        jLabel22 = new javax.swing.JLabel();
-        emes = new javax.swing.JTextField();
-        jLabel23 = new javax.swing.JLabel();
-        eano = new javax.swing.JTextField();
+        cingreso = new com.toedter.calendar.JDateChooser();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablePersonal = new javax.swing.JTable();
@@ -263,6 +259,9 @@ private AreaJpaController carea;
         jLabel5.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
         jLabel5.setText("Apellido materno");
 
+        tablaPo.setBackground(new java.awt.Color(174, 226, 255));
+        tablaPo.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 14)); // NOI18N
+        tablaPo.setForeground(new java.awt.Color(0, 0, 0));
         tablaPo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
@@ -349,20 +348,8 @@ private AreaJpaController carea;
         jLabel9.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
         jLabel9.setText("Apellido materno:");
 
-        jLabel10.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
-        jLabel10.setText("Edad:");
-
         jLabel11.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
         jLabel11.setText("Fecha de nacimiento:");
-
-        jLabel12.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
-        jLabel12.setText("Dia:");
-
-        jLabel13.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
-        jLabel13.setText("Mes:");
-
-        jLabel14.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
-        jLabel14.setText("Año:");
 
         jButton5.setText("Agregar");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
@@ -381,31 +368,18 @@ private AreaJpaController carea;
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
                     .addComponent(jLabel9)
-                    .addComponent(jLabel10)
                     .addComponent(jLabel11))
                 .addGap(114, 114, 114)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(jLabel12)
-                        .addGap(18, 18, 18)
-                        .addComponent(dia, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel13)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(mes, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel14)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton5)
-                            .addComponent(año, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(cnaci, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(290, 290, 290)
+                        .addComponent(jButton5))
                     .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(edad)
+                        .addComponent(cnaci, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(materno, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
                         .addComponent(paterno, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(nombre, javax.swing.GroupLayout.Alignment.LEADING)))
-                .addContainerGap(799, Short.MAX_VALUE))
+                .addContainerGap(849, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -422,22 +396,11 @@ private AreaJpaController carea;
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(materno, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(edad, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel12)
-                    .addComponent(dia, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel13)
-                    .addComponent(mes, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel14)
-                    .addComponent(año, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(cnaci, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 338, Short.MAX_VALUE)
+                .addGap(42, 42, 42)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cnaci, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 440, Short.MAX_VALUE)
                 .addComponent(jButton5)
                 .addGap(21, 21, 21))
         );
@@ -472,14 +435,29 @@ private AreaJpaController carea;
         jButton4.setBackground(new java.awt.Color(82, 109, 130));
         jButton4.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
         jButton4.setText("Recoleccion de residuos");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jToggleButton1.setBackground(new java.awt.Color(82, 109, 130));
         jToggleButton1.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
         jToggleButton1.setText("Panteones");
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
+            }
+        });
 
         jButton6.setBackground(new java.awt.Color(82, 109, 130));
         jButton6.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
         jButton6.setText("Alumbrado publico");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         jButton7.setBackground(new java.awt.Color(82, 109, 130));
         jButton7.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
@@ -493,6 +471,11 @@ private AreaJpaController carea;
         jButton8.setBackground(new java.awt.Color(82, 109, 130));
         jButton8.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
         jButton8.setText("Agua potable");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -552,10 +535,14 @@ private AreaJpaController carea;
 
         tabbedpane.addTab("Servicios                       ", new javax.swing.ImageIcon(getClass().getResource("/iconos/labour-working-process (1).png")), jPanel3); // NOI18N
 
+        jTabbedPane3.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
+
         jPanel9.setBackground(new java.awt.Color(142, 167, 233));
 
+        jLabel7.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
         jLabel7.setText("Nombre");
 
+        jLabel8.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
         jLabel8.setText("Apellido paterno");
 
         epate.addActionListener(new java.awt.event.ActionListener() {
@@ -564,6 +551,7 @@ private AreaJpaController carea;
             }
         });
 
+        jLabel15.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
         jLabel15.setText("Apellido Materno");
 
         emate.addActionListener(new java.awt.event.ActionListener() {
@@ -572,14 +560,19 @@ private AreaJpaController carea;
             }
         });
 
+        jLabel16.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
         jLabel16.setText("Direccion");
 
+        jLabel17.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
         jLabel17.setText("Telefono");
 
+        jLabel18.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
         jLabel18.setText("Correo");
 
+        jLabel19.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
         jLabel19.setText("Puesto");
 
+        jLabel20.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
         jLabel20.setText("Fecha de ingreso");
 
         jButton1.setText("Registrar");
@@ -588,12 +581,6 @@ private AreaJpaController carea;
                 jButton1ActionPerformed(evt);
             }
         });
-
-        jLabel21.setText("Dia");
-
-        jLabel22.setText("Mes");
-
-        jLabel23.setText("Año");
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -613,43 +600,31 @@ private AreaJpaController carea;
                     .addComponent(jLabel19))
                 .addGap(91, 91, 91)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
                         .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel9Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jButton1))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel9Layout.createSequentialGroup()
-                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel9Layout.createSequentialGroup()
-                                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addComponent(etel, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-                                                .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(epate))
-                                            .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(160, 160, 160)
-                                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(emate, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel18)
-                                            .addComponent(ecorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(jPanel9Layout.createSequentialGroup()
-                                        .addComponent(jLabel21)
-                                        .addGap(28, 28, 28)
-                                        .addComponent(edia, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(50, 50, 50)
-                                        .addComponent(jLabel22)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(emes, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(48, 48, 48)
-                                        .addComponent(jLabel23)
-                                        .addGap(29, 29, 29)
-                                        .addComponent(eano, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 562, Short.MAX_VALUE)))
-                        .addGap(127, 127, 127))))
+                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(etel, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+                                        .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(epate))
+                                    .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(178, 178, 178)
+                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(emate, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel18)
+                                    .addComponent(ecorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 544, Short.MAX_VALUE)))
+                        .addGap(127, 127, 127))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cingreso, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -679,15 +654,10 @@ private AreaJpaController carea;
                     .addComponent(jLabel19)
                     .addComponent(jLabel20))
                 .addGap(33, 33, 33)
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(epuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(edia, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel21)
-                    .addComponent(jLabel22)
-                    .addComponent(emes, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel23)
-                    .addComponent(eano, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 254, Short.MAX_VALUE)
+                    .addComponent(cingreso, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 242, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addGap(65, 65, 65))
         );
@@ -918,28 +888,63 @@ private AreaJpaController carea;
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
         
-
+        String nome = nombre.getText();
+        String pate = paterno.getText();
+        String mate = materno.getText();
+        String ip = ObtenerLetras(nome,pate,mate);
+        System.out.println(ip);
         
-        String fecha = año.getText()+ "-" + mes.getText()+"-"+dia.getText(); 
         Poblador habitante = new Poblador();
+        habitante.setIdpoblador(ip);
         habitante.setNombre( nombre.getText());
         habitante.setApellidop(paterno.getText());
         habitante.setApellidom(materno.getText());
-        habitante.setEdad(Integer.valueOf(String.valueOf(edad.getValue())));
+        
+        java.util.Date fechaSeleccionada = cnaci.getDate();
+       java.sql.Date fechaSql = new java.sql.Date(fechaSeleccionada.getTime());
+       System.out.println(fechaSql);
+        
          DateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-        Date fechaDate = Date.valueOf(fecha);
+        //Date fechaDate = Date.valueOf(fecha);
 
-        habitante.setFechanacimiento(fechaDate);
-        pcon.create(habitante);
+       //habitante.setFechanacimiento(fechaDate);
+             //  System.out.println(fechaDate);
+       //calcular edad a partir del chooser
+         java.util.Date fechaNacimiento  = cnaci.getDate();
+          
+           Calendar calNacimiento = Calendar.getInstance();
+           calNacimiento.setTime(fechaNacimiento);
+           
+            Calendar calActual = Calendar.getInstance();
+        
+        int edad = calcularEdad(calNacimiento, calActual);
+                habitante.setEdad(edad);
+
+        System.out.println("La edad es: " + edad);
+       
+       
+       //
+       habitante.setFechanacimiento(fechaSql);
+       
+       
+
+        
+           
+
+
+
+        try{
+                pcon.create(habitante);
+
+        }catch(Exception e){
+        System.out.println("no se pudo");
+        }
                                     JOptionPane.showMessageDialog(null, "Se registro correctamente");
 
         nombre.setText("");
         paterno.setText("");
         materno.setText("");
-        edad.setValue(0);
-        dia.setText("");
-        mes.setText("");
-        año.setText("");
+
                         mPo.fireTableDataChanged();
                         actualizar_tablas();
 
@@ -947,6 +952,35 @@ private AreaJpaController carea;
        
     }//GEN-LAST:event_jButton5ActionPerformed
 
+     
+    public static int calcularEdad(Calendar fechaNacimiento, Calendar fechaActual) {
+        int diferencia = fechaActual.get(Calendar.YEAR) - fechaNacimiento.get(Calendar.YEAR);
+        
+        if (fechaActual.get(Calendar.MONTH) < fechaNacimiento.get(Calendar.MONTH) ||
+            (fechaActual.get(Calendar.MONTH) == fechaNacimiento.get(Calendar.MONTH) &&
+            fechaActual.get(Calendar.DAY_OF_MONTH) < fechaNacimiento.get(Calendar.DAY_OF_MONTH))) {
+            diferencia--;
+        }
+        
+        return diferencia;
+    }
+    
+    
+    public String ObtenerLetras(String nombre,String paterno,String materno ){
+            int numero = tablaPo.getRowCount() +1;
+
+        String cadena = "";
+        cadena += nombre.substring(0, 2).toUpperCase();
+        cadena += paterno.substring(0, 2).toUpperCase();
+        cadena += materno.substring(0, 2).toUpperCase();
+        cadena += "-";
+        cadena += numero;
+        
+        return cadena;
+    }
+    
+    
+            
     private void bpaternoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bpaternoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_bpaternoActionPerformed
@@ -1006,7 +1040,6 @@ private AreaJpaController carea;
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        String fecha = eano.getText()+ "-" + emes.getText()+"-"+edia.getText(); 
         
         Empleado empleado = new Empleado();
         empleado.setNombre(enombre.getText());
@@ -1016,9 +1049,15 @@ private AreaJpaController carea;
         empleado.setCorreo(ecorreo.getText());
         empleado.setDireccion(edirec.getText());
         empleado.setTelefono(etel.getText());
-        DateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-        Date fechaDate = Date.valueOf(fecha);
-        empleado.setFechaingreso(fechaDate);
+        
+          java.util.Date fechaSeleccionada = cingreso.getDate();
+       java.sql.Date fechaSql = new java.sql.Date(fechaSeleccionada.getTime());
+       System.out.println(fechaSql);
+        
+        
+        //DateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+        //Date fechaDate = Date.valueOf(fecha);
+        empleado.setFechaingreso(fechaSql);
         econ.create(empleado);
         JOptionPane.showMessageDialog(null, "Se registro correctamente");
         enombre.setText("");
@@ -1028,9 +1067,8 @@ private AreaJpaController carea;
         ecorreo.setText("");
         edirec.setText("");
         etel.setText("");
-        eano.setText("");
-        emes.setText("");
-        edia.setText("");
+       
+    
         actualizar_tablas();
         
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -1056,7 +1094,34 @@ private AreaJpaController carea;
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
+        Drenaje drena = new Drenaje(new javax.swing.JFrame(), true);
+        drena.setVisible(true);
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        RecoleccionDeResiduos rr = new RecoleccionDeResiduos(new javax.swing.JFrame(), true);
+        rr.setVisible(true);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        // TODO add your handling code here:
+        Panteones pan = new Panteones(new javax.swing.JFrame(), true);
+        pan.setVisible(true);
+        
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        AlumbradoPublico ap = new AlumbradoPublico(new javax.swing.JFrame(), true);
+        ap.setVisible(true);
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+        AguaPotable apo = new AguaPotable(new javax.swing.JFrame(), true);
+        apo.setVisible(true);
+    }//GEN-LAST:event_jButton8ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1096,20 +1161,15 @@ private AreaJpaController carea;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField año;
     private javax.swing.JTextField bmaterno;
     private javax.swing.JTextField bnombre;
     private javax.swing.JTextField bpaterno;
     private javax.swing.JButton buscaPersona;
+    private com.toedter.calendar.JDateChooser cingreso;
     private com.toedter.calendar.JDateChooser cnaci;
-    private javax.swing.JTextField dia;
-    private javax.swing.JTextField eano;
     private javax.swing.JTextField ecorreo;
-    private javax.swing.JSpinner edad;
-    private javax.swing.JTextField edia;
     private javax.swing.JTextField edirec;
     private javax.swing.JTextField emate;
-    private javax.swing.JTextField emes;
     private javax.swing.JTextField enombre;
     private javax.swing.JTextField epate;
     private javax.swing.JTextField epuesto;
@@ -1125,11 +1185,7 @@ private AreaJpaController carea;
     private javax.swing.JButton jButton8;
     private com.toedter.calendar.JCalendar jCalendar1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
@@ -1137,9 +1193,6 @@ private AreaJpaController carea;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
@@ -1169,7 +1222,6 @@ private AreaJpaController carea;
     private javax.swing.JTabbedPane jTabbedPane3;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JTextField materno;
-    private javax.swing.JTextField mes;
     private javax.swing.JTextField nombre;
     private javax.swing.JTextField paterno;
     private javax.swing.JButton salir;

@@ -6,6 +6,7 @@
 package control;
 
 import control.exceptions.NonexistentEntityException;
+import control.exceptions.PreexistingEntityException;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -31,13 +32,18 @@ public class PobladorJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Poblador poblador) {
+    public void create(Poblador poblador) throws PreexistingEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             em.persist(poblador);
             em.getTransaction().commit();
+        } catch (Exception ex) {
+            if (findPoblador(poblador.getIdpoblador()) != null) {
+                throw new PreexistingEntityException("Poblador " + poblador + " already exists.", ex);
+            }
+            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -55,7 +61,7 @@ public class PobladorJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = poblador.getIdpoblador();
+                String id = poblador.getIdpoblador();
                 if (findPoblador(id) == null) {
                     throw new NonexistentEntityException("The poblador with id " + id + " no longer exists.");
                 }
@@ -68,7 +74,7 @@ public class PobladorJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
+    public void destroy(String id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -113,7 +119,7 @@ public class PobladorJpaController implements Serializable {
         }
     }
 
-    public Poblador findPoblador(Integer id) {
+    public Poblador findPoblador(String id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(Poblador.class, id);

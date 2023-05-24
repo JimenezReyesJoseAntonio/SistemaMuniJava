@@ -21,7 +21,8 @@ public class ModeloPobladores extends AbstractTableModel{
     datos = d;
     }
     
-    public String getColumName(int i){
+     @Override
+    public String getColumnName(int i){
      return nombreCols[i];
     }
     

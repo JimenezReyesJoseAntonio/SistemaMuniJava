@@ -10,8 +10,6 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -39,10 +37,9 @@ public class Poblador implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "idpoblador")
-    private Integer idpoblador;
+    private String idpoblador;
     @Column(name = "nombre")
     private String nombre;
     @Column(name = "apellidop")
@@ -58,15 +55,15 @@ public class Poblador implements Serializable {
     public Poblador() {
     }
 
-    public Poblador(Integer idpoblador) {
+    public Poblador(String idpoblador) {
         this.idpoblador = idpoblador;
     }
 
-    public Integer getIdpoblador() {
+    public String getIdpoblador() {
         return idpoblador;
     }
 
-    public void setIdpoblador(Integer idpoblador) {
+    public void setIdpoblador(String idpoblador) {
         this.idpoblador = idpoblador;
     }
 
